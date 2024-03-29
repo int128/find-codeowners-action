@@ -9,6 +9,14 @@ inputs:
     description: Path to find the owners
     required: true
 
+outputs:
+  owners:
+    description: Owners
+  team-owners:
+    description: Team owners in the form of @org/team
+  team-owners-without-organization:
+    description: Team owners in the form of @team
+
 runs:
   using: 'node20'
   main: 'dist/index.js'

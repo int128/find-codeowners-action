@@ -8,7 +8,6 @@ type Inputs = {
 }
 
 type Outputs = {
-  firstOwner: string
   owners: string[]
   teamOwners: string[]
   teamOwnersWithoutOrganization: string[]
@@ -31,14 +30,11 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
 export const formatOutputs = (owners: string[]): Outputs => {
   const teams = findTeams(owners)
   return {
-    firstOwner: firstOrEmpty(owners),
     owners: owners,
     teamOwners: teams,
     teamOwnersWithoutOrganization: formatTeamsWithoutOrganization(teams),
   }
 }
-
-const firstOrEmpty = (a: string[]): string => (a.length > 0 ? a[0] : '')
 
 const findTeams = (owners: string[]): string[] => owners.filter((owner) => owner.match(/^@.+\/.+/))
 
