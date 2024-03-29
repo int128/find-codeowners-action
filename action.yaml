@@ -2,8 +2,11 @@ name: find-codeowners-action
 description: Find the owners from CODEOWNERS
 
 inputs:
-  filename:
-    description: Filename to find the owners
+  codeowners:
+    description: Filename of CODEOWNERS
+    required: true
+  find-by-path:
+    description: Path to find the owners
     required: true
 
 runs:
