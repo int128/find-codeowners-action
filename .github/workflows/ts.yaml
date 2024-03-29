@@ -32,10 +32,11 @@ jobs:
       - run: pnpm test
       - run: pnpm build
 
-      - name: e2e-test
+      - name: Run find-codeowners-action
         uses: ./
         with:
-          name: foo
+          codeowners: .github/CODEOWNERS
+          find-by-path: src/main.ts
 
   generate:
     runs-on: ubuntu-latest

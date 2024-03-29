@@ -1,10 +1,21 @@
-name: typescript-action
-description: Template of TypeScript Action
+name: find-codeowners-action
+description: Find the owners from CODEOWNERS
 
 inputs:
-  name:
-    description: example input
+  codeowners:
+    description: Filename of CODEOWNERS
     required: true
+  find-by-path:
+    description: Path to find the owners
+    required: true
+
+outputs:
+  owners:
+    description: Owners
+  team-owners:
+    description: Team owners in the form of @org/team
+  team-owners-without-organization:
+    description: Team owners in the form of @team
 
 runs:
   using: 'node20'
