@@ -31,4 +31,8 @@ jobs:
 
 ### Outputs
 
-- `first-owner`
+| Name                               | Description                            |
+| ---------------------------------- | -------------------------------------- |
+| `owners`                           | Owners                                 |
+| `team-owners`                      | Team owners in the form of `@org/team` |
+| `team-owners-without-organization` | Team owners in the form of `@team`     |
