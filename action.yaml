@@ -1,9 +1,9 @@
-name: typescript-action
-description: Template of TypeScript Action
+name: find-codeowners-action
+description: Find the owners from CODEOWNERS
 
 inputs:
-  name:
-    description: example input
+  filename:
+    description: Filename to find the owners
     required: true
 
 runs:
