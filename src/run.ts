@@ -15,8 +15,8 @@ type Outputs = {
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   core.info(`Reading ${inputs.codeowners}`)
-  const content = (await fs.readFile(inputs.codeowners)).toString()
-  const rules = parse(content)
+  const f = await fs.readFile(inputs.codeowners)
+  const rules = parse(f.toString())
   core.startGroup(`Parsed ${inputs.codeowners}`)
   core.info(JSON.stringify(rules, undefined, 2))
   core.endGroup()
