@@ -4,6 +4,8 @@ This action finds the owners from CODEOWNERS.
 
 ## Getting Started
 
+### Notify a workflow run event to the owners
+
 ```yaml
 on:
   workflow_run:
@@ -11,7 +13,7 @@ on:
       - completed
 
 jobs:
-  build:
+  notify-workflow-run:
     runs-on: ubuntu-latest
     steps:
       - id: codeowners
