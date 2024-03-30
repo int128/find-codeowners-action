@@ -47,7 +47,7 @@ jobs:
           codeowners: .github/CODEOWNERS
           path: src/*.ts
           path-glob: true
-      - if: steps.test-codeowners-1.outputs.no-owner-files != ''
+      - if: steps.test-codeowners-1.outputs.no-owner-files
         run: exit 1
 
       - id: test-codeowners-2
@@ -57,7 +57,7 @@ jobs:
           codeowners: .github/CODEOWNERS
           path: .github/workflows/*
           path-glob: true
-      - if: steps.test-codeowners-2.outputs.no-owner-files
+      - if: steps.test-codeowners-2.outputs.no-owner-files == ''
         run: exit 1
 
   generate:
