@@ -68,9 +68,8 @@ jobs:
           codeowners: CODEOWNERS
           path: .github/workflows/*
           path-glob: true
-      - run: test -z "$no_owner_files"
-        env:
-          no_owner_files: ${{ steps.test-codeowners-1.outputs.no-owner-files }}
+      - if: steps.codeowners.outputs.no-owner-files
+        run: exit 1
 ```
 
 ## Specification
