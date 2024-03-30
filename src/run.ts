@@ -29,7 +29,7 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
         } else {
           core.info(`Path ${path} does not have any owner`)
           if (inputs.errorNoOwner) {
-            throw new Error(`No ownership of ${path}. Need to add a rule to ${inputs.codeowners}`)
+            throw new Error(`No ownership of ${path}. Need to fix ${inputs.codeowners}`)
           }
         }
         return owners
