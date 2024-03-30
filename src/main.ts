@@ -4,7 +4,9 @@ import { run } from './run.js'
 const main = async (): Promise<void> => {
   const outputs = await run({
     codeowners: core.getInput('codeowners', { required: true }),
-    findByPath: core.getInput('find-by-path', { required: true }),
+    paths: core.getMultilineInput('path', { required: true }),
+    pathGlob: core.getBooleanInput('path-glob'),
+    errorNoOwner: core.getBooleanInput('error-no-owner'),
   })
   core.setOutput('owners', outputs.owners.join(' '))
   core.setOutput('team-owners', outputs.teamOwners.join(' '))

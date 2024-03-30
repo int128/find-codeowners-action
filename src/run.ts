@@ -1,10 +1,13 @@
-import * as core from '@actions/core'
 import { RuleSet, parse } from './codeowners.js'
+import * as core from '@actions/core'
 import * as fs from 'fs/promises'
+import { glob } from 'glob'
 
 type Inputs = {
   codeowners: string
-  findByPath: string
+  paths: string[]
+  pathGlob: boolean
+  errorNoOwner: boolean
 }
 
 type Outputs = {
@@ -14,19 +17,43 @@ type Outputs = {
 }
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
-  core.info(`Reading ${inputs.codeowners}`)
-  const rules = parse(await readContent(inputs.codeowners))
-  core.startGroup(`Parsed ${inputs.codeowners}`)
-  core.info(JSON.stringify(rules, undefined, 2))
-  core.endGroup()
-  const ruleSet = new RuleSet(rules)
+  const ruleSet = await readCodeowners(inputs.codeowners)
+  const paths = inputs.pathGlob ? await expandPaths(inputs.paths) : inputs.paths
 
-  const owners = ruleSet.findOwners(inputs.findByPath)
-  core.info(`Owners = ${JSON.stringify(owners, undefined, 2)}`)
+  const owners = [
+    ...new Set(
+      paths.flatMap((path) => {
+        const owners = ruleSet.findOwners(path)
+        if (owners.length > 0) {
+          core.info(`Path ${path} has owners: ${owners.join(' ')}`)
+        } else {
+          core.info(`Path ${path} does not have any owner`)
+          if (inputs.errorNoOwner) {
+            throw new Error(`No ownership of ${path}. Need to fix ${inputs.codeowners}`)
+          }
+        }
+        return owners
+      }),
+    ),
+  ]
   return formatOutputs(owners)
 }
 
-const readContent = async (path: string) => (await fs.readFile(path)).toString()
+const readCodeowners = async (path: string) => {
+  core.info(`Reading ${path}`)
+  const content = await fs.readFile(path)
+  const rules = parse(content.toString())
+  return new RuleSet(rules)
+}
+
+const expandPaths = async (paths: string[]) => {
+  const ignorePaths = paths.filter((path) => path.startsWith('!'))
+  const globPaths = paths.filter((path) => !path.startsWith('!'))
+  return await glob(globPaths, {
+    ignore: ignorePaths,
+    dot: true,
+  })
+}
 
 export const formatOutputs = (owners: string[]): Outputs => {
   const teams = findTeams(owners)

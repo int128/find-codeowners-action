@@ -37,8 +37,28 @@ jobs:
         uses: ./
         with:
           codeowners: .github/CODEOWNERS
-          find-by-path: src/main.ts
+          path: src/main.ts
       - run: test '${{ steps.codeowners.outputs.owners }}' = '@int128'
+
+      - id: test-codeowners-1
+        name: Test CODEOWNERS
+        uses: ./
+        with:
+          codeowners: .github/CODEOWNERS
+          path: src/*.ts
+          path-glob: true
+          error-no-owner: true
+
+      - id: test-codeowners-2
+        name: Test CODEOWNERS
+        uses: ./
+        with:
+          codeowners: .github/CODEOWNERS
+          path: .github/workflows/*
+          path-glob: true
+          error-no-owner: true
+        continue-on-error: true
+      - run: test '${{ steps.test-codeowners-2.outcome }}' = 'failure'
 
   generate:
     runs-on: ubuntu-latest

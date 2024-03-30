@@ -13,7 +13,7 @@ steps:
     uses: int128/find-codeowners-action@v0
     with:
       codeowners: CODEOWNERS
-      find-by-path: src/index.ts
+      path: src/index.ts
 ```
 
 This action reads `CODEOWNERS` file in the working directory,
@@ -21,9 +21,11 @@ and finds the owners of `src/index.ts`.
 
 If no owner is found, this action returns an empty string.
 
+## Examples
+
 ### Notify a workflow run event to the owners
 
-Here is an example to notify an event to the corresponding owners.
+To notify an event to the corresponding owners,
 
 ```yaml
 on:
@@ -40,20 +42,51 @@ jobs:
         uses: int128/find-codeowners-action@v0
         with:
           codeowners: CODEOWNERS
-          find-by-path: ${{ github.event.workflow.path }}
+          path: ${{ github.event.workflow.path }}
+
+      # Something to notify
       - uses: slackapi/slack-github-action@v1
         with:
           channel-id: example
           slack-message: |
-            Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, the workflow run is done!
+            Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, done!
 ```
+
+### Test the coverage of CODEOWNERS
+
+To ensure the all workflows are owned by anyone,
+
+```yaml
+jobs:
+  validate-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: codeowners
+        uses: int128/find-codeowners-action@v0
+        with:
+          codeowners: CODEOWNERS
+          path: .github/workflows/*
+          path-glob: true
+          error-no-owner: true
+```
+
+If any workflow has no owner, this action fails as follows:
+
+```console
+Error: No ownership of .github/workflows/build.yaml. Need to fix CODEOWNERS
+```
+
+## Specification
 
 ### Inputs
 
-| Name           | Default    | Description             |
-| -------------- | ---------- | ----------------------- |
-| `codeowners`   | (required) | Filename of CODEOWNERS  |
-| `find-by-path` | (required) | Path to find the owners |
+| Name             | Default    | Description                                      |
+| ---------------- | ---------- | ------------------------------------------------ |
+| `codeowners`     | (required) | Path of CODEOWNERS                               |
+| `path`           | (required) | Path(s) to find the owners (multiline)           |
+| `path-glob`      | false      | If true, evaluate `path` as glob pattern(s)      |
+| `error-no-owner` | false      | If true, throw an error if any path has no owner |
 
 ### Outputs
 
