@@ -45,7 +45,7 @@ jobs:
         uses: ./
         with:
           codeowners: .github/CODEOWNERS
-          path: README.md
+          path: .github/workflows/*
           error-no-owner: true
 
   generate:

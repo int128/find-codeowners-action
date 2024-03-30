@@ -6,6 +6,7 @@ import { glob } from 'glob'
 type Inputs = {
   codeowners: string
   paths: string[]
+  pathGlob: boolean
   errorNoOwner: boolean
 }
 
@@ -17,7 +18,7 @@ type Outputs = {
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   const ruleSet = await readCodeowners(inputs.codeowners)
-  const paths = await expandPaths(inputs.paths)
+  const paths = inputs.pathGlob ? await expandPaths(inputs.paths) : inputs.paths
 
   const owners = [
     ...new Set(
@@ -46,23 +47,12 @@ const readCodeowners = async (path: string) => {
 }
 
 const expandPaths = async (paths: string[]) => {
-  const ignorePaths: string[] = []
-  const globPaths: string[] = []
-  const rawPaths: string[] = []
-  for (const path of paths) {
-    if (path.startsWith('!')) {
-      ignorePaths.push(path)
-    } else if (path.includes('*')) {
-      globPaths.push(path)
-    } else {
-      rawPaths.push(path)
-    }
-  }
-  const expandedPaths = await glob(globPaths, {
+  const ignorePaths = paths.filter((path) => path.startsWith('!'))
+  const globPaths = paths.filter((path) => !path.startsWith('!'))
+  return await glob(globPaths, {
     ignore: ignorePaths,
     dot: true,
   })
-  return [...new Set([...rawPaths, ...expandedPaths])]
 }
 
 export const formatOutputs = (owners: string[]): Outputs => {

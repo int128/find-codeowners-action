@@ -25,7 +25,7 @@ If no owner is found, this action returns an empty string.
 
 ### Notify a workflow run event to the owners
 
-Here is an example to notify an event to the corresponding owners.
+To notify an event to the corresponding owners,
 
 ```yaml
 on:
@@ -43,16 +43,18 @@ jobs:
         with:
           codeowners: CODEOWNERS
           path: ${{ github.event.workflow.path }}
+
+      # Something to notify
       - uses: slackapi/slack-github-action@v1
         with:
           channel-id: example
           slack-message: |
-            Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, the workflow run is done!
+            Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, done!
 ```
 
 ### Test the coverage of CODEOWNERS
 
-To ensure the all workflows are owned,
+To ensure the all workflows are owned by anyone,
 
 ```yaml
 jobs:
@@ -65,6 +67,7 @@ jobs:
         with:
           codeowners: CODEOWNERS
           path: .github/workflows/*
+          path-glob: true
           error-no-owner: true
 ```
 
@@ -72,15 +75,12 @@ jobs:
 
 ### Inputs
 
-| Name             | Default    | Description                                        |
-| ---------------- | ---------- | -------------------------------------------------- |
-| `codeowners`     | (required) | Path of CODEOWNERS                                 |
-| `path`           | (required) | Path(s) to find the owners (multiline)             |
-| `error-no-owner` | false      | If `true`, throw an error if any path has no owner |
-
-You can 1 or more paths to `path`.
-If a path contains any `*`, this action evaluates it as a glob pattern.
-If a path starts with `!`, this action excludes it from the glob pattern.
+| Name             | Default    | Description                                      |
+| ---------------- | ---------- | ------------------------------------------------ |
+| `codeowners`     | (required) | Path of CODEOWNERS                               |
+| `path`           | (required) | Path(s) to find the owners (multiline)           |
+| `path-glob`      | false      | If true, evaluate `path` as glob pattern(s)      |
+| `error-no-owner` | false      | If true, throw an error if any path has no owner |
 
 ### Outputs
 

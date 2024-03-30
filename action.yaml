@@ -8,6 +8,9 @@ inputs:
   path:
     description: Path(s) to find the owners (multiline)
     required: true
+  path-glob:
+    description: If true, evaluate path as glob pattern(s)
+    default: false
   error-no-owner:
     description: If true, throw an error if any path has no owner
     default: false
