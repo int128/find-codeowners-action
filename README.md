@@ -71,6 +71,12 @@ jobs:
           error-no-owner: true
 ```
 
+If any workflow has no owner, this action fails as follows:
+
+```console
+Error: No ownership of .github/workflows/build.yaml. Need to fix CODEOWNERS
+```
+
 ## Specification
 
 ### Inputs
