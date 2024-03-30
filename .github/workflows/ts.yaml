@@ -32,11 +32,13 @@ jobs:
       - run: pnpm test
       - run: pnpm build
 
-      - name: Run find-codeowners-action
+      - id: codeowners
+        name: Run find-codeowners-action
         uses: ./
         with:
           codeowners: .github/CODEOWNERS
           find-by-path: src/main.ts
+      - run: test '${{ steps.codeowners.outputs.owners }}' = '@int128'
 
   generate:
     runs-on: ubuntu-latest

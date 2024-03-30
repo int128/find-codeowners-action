@@ -15,8 +15,7 @@ type Outputs = {
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   core.info(`Reading ${inputs.codeowners}`)
-  const content = (await fs.readFile(inputs.codeowners)).toString()
-  const rules = parse(content)
+  const rules = parse(await readContent(inputs.codeowners))
   core.startGroup(`Parsed ${inputs.codeowners}`)
   core.info(JSON.stringify(rules, undefined, 2))
   core.endGroup()
@@ -26,6 +25,8 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   core.info(`Owners = ${JSON.stringify(owners, undefined, 2)}`)
   return formatOutputs(owners)
 }
+
+const readContent = async (path: string) => (await fs.readFile(path)).toString()
 
 export const formatOutputs = (owners: string[]): Outputs => {
   const teams = findTeams(owners)
