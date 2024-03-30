@@ -13,13 +13,15 @@ steps:
     uses: int128/find-codeowners-action@v0
     with:
       codeowners: CODEOWNERS
-      find-by-path: src/index.ts
+      path: src/index.ts
 ```
 
 This action reads `CODEOWNERS` file in the working directory,
 and finds the owners of `src/index.ts`.
 
 If no owner is found, this action returns an empty string.
+
+## Examples
 
 ### Notify a workflow run event to the owners
 
@@ -40,7 +42,7 @@ jobs:
         uses: int128/find-codeowners-action@v0
         with:
           codeowners: CODEOWNERS
-          find-by-path: ${{ github.event.workflow.path }}
+          path: ${{ github.event.workflow.path }}
       - uses: slackapi/slack-github-action@v1
         with:
           channel-id: example
@@ -48,12 +50,37 @@ jobs:
             Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, the workflow run is done!
 ```
 
+### Test the coverage of CODEOWNERS
+
+To ensure the all workflows are owned,
+
+```yaml
+jobs:
+  validate-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: codeowners
+        uses: int128/find-codeowners-action@v0
+        with:
+          codeowners: CODEOWNERS
+          path: .github/workflows/*
+          error-no-owner: true
+```
+
+## Specification
+
 ### Inputs
 
-| Name           | Default    | Description             |
-| -------------- | ---------- | ----------------------- |
-| `codeowners`   | (required) | Filename of CODEOWNERS  |
-| `find-by-path` | (required) | Path to find the owners |
+| Name             | Default    | Description                                        |
+| ---------------- | ---------- | -------------------------------------------------- |
+| `codeowners`     | (required) | Path of CODEOWNERS                                 |
+| `path`           | (required) | Path(s) to find the owners (multiline)             |
+| `error-no-owner` | false      | If `true`, throw an error if any path has no owner |
+
+You can 1 or more paths to `path`.
+If a path contains any `*`, this action evaluates it as a glob pattern.
+If a path starts with `!`, this action excludes it from the glob pattern.
 
 ### Outputs
 

@@ -3,11 +3,14 @@ description: Find the owners from CODEOWNERS
 
 inputs:
   codeowners:
-    description: Filename of CODEOWNERS
+    description: Path of CODEOWNERS
     required: true
-  find-by-path:
-    description: Path to find the owners
+  path:
+    description: Path(s) to find the owners (multiline)
     required: true
+  error-no-owner:
+    description: If true, throw an error if any path has no owner
+    default: false
 
 outputs:
   owners:

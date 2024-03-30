@@ -37,8 +37,16 @@ jobs:
         uses: ./
         with:
           codeowners: .github/CODEOWNERS
-          find-by-path: src/main.ts
+          path: src/main.ts
       - run: test '${{ steps.codeowners.outputs.owners }}' = '@int128'
+
+      - continue-on-error: true
+        name: Test CODEOWNERS
+        uses: ./
+        with:
+          codeowners: .github/CODEOWNERS
+          path: README.md
+          error-no-owner: true
 
   generate:
     runs-on: ubuntu-latest
