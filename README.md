@@ -68,30 +68,26 @@ jobs:
           codeowners: CODEOWNERS
           path: .github/workflows/*
           path-glob: true
-          error-no-owner: true
-```
-
-If any workflow has no owner, this action fails as follows:
-
-```console
-Error: No ownership of .github/workflows/build.yaml. Need to fix CODEOWNERS
+      - run: test -z "$no_owner_files"
+        env:
+          no_owner_files: ${{ steps.test-codeowners-1.outputs.no-owner-files }}
 ```
 
 ## Specification
 
 ### Inputs
 
-| Name             | Default    | Description                                      |
-| ---------------- | ---------- | ------------------------------------------------ |
-| `codeowners`     | (required) | Path of CODEOWNERS                               |
-| `path`           | (required) | Path(s) to find the owners (multiline)           |
-| `path-glob`      | false      | If true, evaluate `path` as glob pattern(s)      |
-| `error-no-owner` | false      | If true, throw an error if any path has no owner |
+| Name         | Default    | Description                                 |
+| ------------ | ---------- | ------------------------------------------- |
+| `codeowners` | (required) | Path of CODEOWNERS                          |
+| `path`       | (required) | Path(s) to find the owners (multiline)      |
+| `path-glob`  | false      | If true, evaluate `path` as glob pattern(s) |
 
 ### Outputs
 
-| Name                               | Description                            |
-| ---------------------------------- | -------------------------------------- |
-| `owners`                           | Owners                                 |
-| `team-owners`                      | Team owners in the form of `@org/team` |
-| `team-owners-without-organization` | Team owners in the form of `@team`     |
+| Name                               | Description                                     |
+| ---------------------------------- | ----------------------------------------------- |
+| `owners`                           | Owners                                          |
+| `team-owners`                      | Team owners in the form of `@org/team`          |
+| `team-owners-without-organization` | Team owners in the form of `@team`              |
+| `no-owner-files`                   | List of files which are not owned in CODEOWNERS |
