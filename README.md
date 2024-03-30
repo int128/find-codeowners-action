@@ -72,6 +72,12 @@ jobs:
         run: exit 1
 ```
 
+If a file is not owned in CODEOWNERS, this action shows the message.
+
+```console
+Warning: File .github/workflows/build.yaml is not owned by anyone
+```
+
 ## Specification
 
 ### Inputs
