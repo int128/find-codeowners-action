@@ -68,7 +68,7 @@ jobs:
           codeowners: CODEOWNERS
           path: .github/workflows/*
           path-glob: true
-      - if: steps.codeowners.outputs.no-owner-files
+      - if: steps.codeowners.outputs.orphan-files
         run: exit 1
 ```
 
@@ -95,4 +95,4 @@ Warning: File .github/workflows/build.yaml is not owned by anyone
 | `owners`                           | Owners                                          |
 | `team-owners`                      | Team owners in the form of `@org/team`          |
 | `team-owners-without-organization` | Team owners in the form of `@team`              |
-| `no-owner-files`                   | List of files which are not owned in CODEOWNERS |
+| `orphan-files`                     | List of files which are not owned in CODEOWNERS |

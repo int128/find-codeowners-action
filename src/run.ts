@@ -13,14 +13,14 @@ type Outputs = {
   owners: string[]
   teamOwners: string[]
   teamOwnersWithoutOrganization: string[]
-  noOwnerFiles: string[]
+  orphanFiles: string[]
 }
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   const ruleSet = await readCodeowners(inputs.codeowners)
   const files = inputs.pathGlob ? await expandPaths(inputs.paths) : inputs.paths
 
-  const noOwnerFiles: string[] = []
+  const orphanFiles: string[] = []
   const owners = [
     ...new Set(
       files.flatMap((file) => {
@@ -29,7 +29,7 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
           core.info(`File ${file} is owned by ${owners.join(' ')}`)
         } else {
           core.warning(`File ${file} is not owned by anyone`)
-          noOwnerFiles.push(file)
+          orphanFiles.push(file)
         }
         return owners
       }),
@@ -38,7 +38,7 @@ export const run = async (inputs: Inputs): Promise<Outputs> => {
   core.info(`Owners: ${owners.join(' ')}`)
   return {
     ...formatOwners(owners),
-    noOwnerFiles,
+    orphanFiles,
   }
 }
 
