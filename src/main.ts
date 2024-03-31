@@ -8,8 +8,7 @@ const main = async (): Promise<void> => {
     pathGlob: core.getBooleanInput('path-glob'),
   })
   core.setOutput('owners', outputs.owners.join(' '))
-  core.setOutput('team-owners', outputs.teamOwners.join(' '))
-  core.setOutput('team-owners-without-organization', outputs.teamOwnersWithoutOrganization.join(' '))
+  core.setOutput('owners-without-organization', outputs.ownersWithoutOrganization.join(' '))
   core.setOutput('orphan-files', outputs.orphanFiles.join('\n'))
 }
 

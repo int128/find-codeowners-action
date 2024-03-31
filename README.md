@@ -49,7 +49,7 @@ jobs:
         with:
           channel-id: example
           slack-message: |
-            Hey ${{ steps.codeowners.outputs.team-owners-without-organization }}, done!
+            Hey ${{ steps.codeowners.outputs.owners-without-organization }}, done!
 ```
 
 ### Test the coverage of CODEOWNERS
@@ -90,9 +90,8 @@ Warning: File .github/workflows/build.yaml is not owned by anyone
 
 ### Outputs
 
-| Name                               | Description                                     |
-| ---------------------------------- | ----------------------------------------------- |
-| `owners`                           | Owners                                          |
-| `team-owners`                      | Team owners in the form of `@org/team`          |
-| `team-owners-without-organization` | Team owners in the form of `@team`              |
-| `orphan-files`                     | List of files which are not owned in CODEOWNERS |
+| Name                          | Description                                                            |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| `owners`                      | List of owners, separated by space                                     |
+| `owners-without-organization` | List of owners in the form of `@user` or `@team`, separated by space   |
+| `orphan-files`                | List of files which are not owned in CODEOWNERS, separated by new line |
