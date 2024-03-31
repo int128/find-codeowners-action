@@ -47,7 +47,8 @@ jobs:
           codeowners: .github/CODEOWNERS
           path: src/*.ts
           path-glob: true
-          error-no-owner: true
+      - if: steps.test-codeowners-1.outputs.no-owner-files
+        run: exit 1
 
       - id: test-codeowners-2
         name: Test CODEOWNERS
@@ -56,9 +57,8 @@ jobs:
           codeowners: .github/CODEOWNERS
           path: .github/workflows/*
           path-glob: true
-          error-no-owner: true
-        continue-on-error: true
-      - run: test '${{ steps.test-codeowners-2.outcome }}' = 'failure'
+      - if: steps.test-codeowners-2.outputs.no-owner-files == ''
+        run: exit 1
 
   generate:
     runs-on: ubuntu-latest

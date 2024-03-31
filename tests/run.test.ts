@@ -1,8 +1,8 @@
-import { formatOutputs } from '../src/run.js'
+import { formatOwners } from '../src/run.js'
 
-describe('formatOutputs', () => {
+describe('formatOwners', () => {
   it('should format an empty owners', () => {
-    const outputs = formatOutputs([])
+    const outputs = formatOwners([])
     expect(outputs).toStrictEqual({
       owners: [],
       teamOwners: [],
@@ -11,7 +11,7 @@ describe('formatOutputs', () => {
   })
 
   it('should format the owners', () => {
-    const outputs = formatOutputs(['@global-owner1', '@octo-org/octocats', 'docs@example.com'])
+    const outputs = formatOwners(['@global-owner1', '@octo-org/octocats', 'docs@example.com'])
     expect(outputs).toStrictEqual({
       owners: ['@global-owner1', '@octo-org/octocats', 'docs@example.com'],
       teamOwners: ['@octo-org/octocats'],

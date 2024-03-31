@@ -7,36 +7,39 @@ type Inputs = {
   codeowners: string
   paths: string[]
   pathGlob: boolean
-  errorNoOwner: boolean
 }
 
 type Outputs = {
   owners: string[]
   teamOwners: string[]
   teamOwnersWithoutOrganization: string[]
+  noOwnerFiles: string[]
 }
 
 export const run = async (inputs: Inputs): Promise<Outputs> => {
   const ruleSet = await readCodeowners(inputs.codeowners)
-  const paths = inputs.pathGlob ? await expandPaths(inputs.paths) : inputs.paths
+  const files = inputs.pathGlob ? await expandPaths(inputs.paths) : inputs.paths
 
+  const noOwnerFiles: string[] = []
   const owners = [
     ...new Set(
-      paths.flatMap((path) => {
-        const owners = ruleSet.findOwners(path)
+      files.flatMap((file) => {
+        const owners = ruleSet.findOwners(file)
         if (owners.length > 0) {
-          core.info(`Path ${path} has owners: ${owners.join(' ')}`)
+          core.info(`File ${file} is owned by ${owners.join(' ')}`)
         } else {
-          core.info(`Path ${path} does not have any owner`)
-          if (inputs.errorNoOwner) {
-            throw new Error(`No ownership of ${path}. Need to fix ${inputs.codeowners}`)
-          }
+          core.warning(`File ${file} is not owned by anyone`)
+          noOwnerFiles.push(file)
         }
         return owners
       }),
     ),
   ]
-  return formatOutputs(owners)
+  core.info(`Owners: ${owners.join(' ')}`)
+  return {
+    ...formatOwners(owners),
+    noOwnerFiles,
+  }
 }
 
 const readCodeowners = async (path: string) => {
@@ -55,7 +58,7 @@ const expandPaths = async (paths: string[]) => {
   })
 }
 
-export const formatOutputs = (owners: string[]): Outputs => {
+export const formatOwners = (owners: string[]) => {
   const teams = findTeams(owners)
   return {
     owners: owners,

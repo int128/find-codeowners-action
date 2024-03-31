@@ -11,9 +11,6 @@ inputs:
   path-glob:
     description: If true, evaluate path as glob pattern(s)
     default: false
-  error-no-owner:
-    description: If true, throw an error if any path has no owner
-    default: false
 
 outputs:
   owners:
@@ -22,6 +19,8 @@ outputs:
     description: Team owners in the form of @org/team
   team-owners-without-organization:
     description: Team owners in the form of @team
+  no-owner-files:
+    description: List of files which are not owned in CODEOWNERS
 
 runs:
   using: 'node20'
