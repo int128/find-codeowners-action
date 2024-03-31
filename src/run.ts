@@ -9,10 +9,7 @@ type Inputs = {
   pathGlob: boolean
 }
 
-type Outputs = {
-  owners: string[]
-  teamOwners: string[]
-  teamOwnersWithoutOrganization: string[]
+type Outputs = OwnersOutputs & {
   orphanFiles: string[]
 }
 
@@ -58,15 +55,16 @@ const expandPaths = async (paths: string[]) => {
   })
 }
 
-export const formatOwners = (owners: string[]) => {
-  const teams = findTeams(owners)
+type OwnersOutputs = {
+  owners: string[]
+  ownersWithoutOrganization: string[]
+}
+
+export const formatOwners = (owners: string[]): OwnersOutputs => {
   return {
     owners: owners,
-    teamOwners: teams,
-    teamOwnersWithoutOrganization: formatTeamsWithoutOrganization(teams),
+    ownersWithoutOrganization: trimOrganization(owners),
   }
 }
 
-const findTeams = (owners: string[]): string[] => owners.filter((owner) => owner.match(/^@.+\/.+/))
-
-const formatTeamsWithoutOrganization = (teams: string[]) => teams.map((team) => team.replace(/^@.+\/(.+)/, '@$1'))
+const trimOrganization = (owners: string[]) => owners.map((team) => team.replace(/^@.+\/(.+)/, '@$1'))
