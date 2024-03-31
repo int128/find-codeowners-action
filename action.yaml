@@ -19,7 +19,7 @@ outputs:
     description: Team owners in the form of @org/team
   team-owners-without-organization:
     description: Team owners in the form of @team
-  no-owner-files:
+  orphan-files:
     description: List of files which are not owned in CODEOWNERS
 
 runs:
