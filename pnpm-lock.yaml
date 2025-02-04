@@ -18,6 +18,9 @@ importers:
         specifier: 9.0.4
         version: 9.0.4
     devDependencies:
+      '@eslint/js':
+        specifier: 9.19.0
+        version: 9.19.0
       '@tsconfig/node20':
         specifier: 20.1.4
         version: 20.1.4
@@ -39,6 +42,9 @@ importers:
       jest:
         specifier: 29.7.0
         version: 29.7.0(@types/node@20.12.12)
+      pnpm:
+        specifier: 10.1.0
+        version: 10.1.0
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -247,6 +253,10 @@ packages:
 
   '@eslint/eslintrc@3.0.2':
     resolution: {integrity: sha512-wV19ZEGEMAC1eHgrS7UQPqsdEiCIbTKTasEfcXAigzoXICcqZSjBZEHlZwNVvKg6UBCjSlos84XiLqsRJnIcIg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.19.0':
+    resolution: {integrity: sha512-rbq9/g38qjfqFLOVPvwjIvFFdNziEC5S65jmjPw5r6A//QH+W91akh9irMwjDN8zKUTak6W9EsAv4m/7Wnw0UQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.2.0':
@@ -1401,6 +1411,11 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
+  pnpm@10.1.0:
+    resolution: {integrity: sha512-yJhHsGZ92rUDlru9AIoqQ887WB79Wc9dmqiSPqH7S4EGwEHVQNCKywlQN1lNc+vFHh7InuQMiLMLimbA+uCsGw==}
+    engines: {node: '>=18.12'}
+    hasBin: true
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -1938,6 +1953,8 @@ snapshots:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+
+  '@eslint/js@9.19.0': {}
 
   '@eslint/js@9.2.0': {}
 
@@ -3401,6 +3418,8 @@ snapshots:
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
+
+  pnpm@10.1.0: {}
 
   prelude-ls@1.2.1: {}
 
