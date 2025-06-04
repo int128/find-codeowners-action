@@ -9,7 +9,7 @@
   "type": "module",
   "dependencies": {
     "@actions/core": "1.11.1",
-    "glob": "10.3.15",
+    "glob": "10.4.5",
     "minimatch": "9.0.5"
   },
   "devDependencies": {
