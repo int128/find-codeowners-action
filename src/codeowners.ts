@@ -23,12 +23,12 @@ export const parse = (content: string): Rule[] => {
   return rules
 }
 
-type Matcher = {
+type RuleMatcher = {
   match(filename: string): boolean
   owners: string[]
 }
 
-const createMatcher = (rule: Rule): Matcher => {
+const compile = (rule: Rule): RuleMatcher => {
   let pattern = rule.pattern
   if (pattern.startsWith('**')) {
     pattern = `/${pattern}`
@@ -56,23 +56,25 @@ const createMatcher = (rule: Rule): Matcher => {
   }
 }
 
-export class RuleSet {
-  private readonly matchers: Matcher[]
+export class Matcher {
+  private readonly ruleMatchers: RuleMatcher[]
 
   constructor(rules: Rule[]) {
-    this.matchers = rules
-      .map((rule) => createMatcher(rule))
+    this.ruleMatchers = rules
+      .map((rule) => compile(rule))
       // We need to find one in reverse order. The last mentioned code owner is valid.
       // https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-syntax
       .reverse()
   }
 
   findOwners(filename: string): string[] {
-    for (const matcher of this.matchers) {
-      if (matcher.match(filename)) {
-        return matcher.owners
+    for (const ruleMatcher of this.ruleMatchers) {
+      if (ruleMatcher.match(filename)) {
+        return ruleMatcher.owners
       }
     }
     return []
   }
 }
+
+export const createMatcher = (codeownersContent: string): Matcher => new Matcher(parse(codeownersContent))

@@ -1,7 +1,7 @@
 import * as codeowners from '../src/codeowners.js'
 
-describe('class Codeowners', () => {
-  const ruleSet = new codeowners.RuleSet([
+describe('class Matcher', () => {
+  const matcher = new codeowners.Matcher([
     // From the example of the official docs:
     // https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#example-of-a-codeowners-file
     { pattern: '*.js', owners: ['@js-owner'] },
@@ -21,19 +21,19 @@ describe('class Codeowners', () => {
     { filename: 'logs/1.log', owners: ['@logs-owner'] },
     { filename: 'component/logs/1.log', owners: ['@logs-owner'] },
     { filename: 'build/logs/1.log', owners: ['@build-owner'] },
-  ])('should return $owners corresponding to $filename', ({ filename, owners }) => {
-    const found = ruleSet.findOwners(filename)
+  ])('returns $owners corresponding to $filename', ({ filename, owners }) => {
+    const found = matcher.findOwners(filename)
     expect(found).toStrictEqual(owners)
   })
 })
 
 describe('parse()', () => {
-  it('should return an empty if the CODEOWNERS is nothing', () => {
+  it('returns an empty if the CODEOWNERS is nothing', () => {
     const rules = codeowners.parse(``)
     expect(rules).toStrictEqual([])
   })
 
-  it('should return the rule', () => {
+  it('returns the rule', () => {
     const rules = codeowners.parse(`*       @global-owner1 @global-owner2`)
     expect(rules).toStrictEqual([
       {
@@ -43,7 +43,7 @@ describe('parse()', () => {
     ])
   })
 
-  it('should return the rules', () => {
+  it('returns the rules', () => {
     const rules = codeowners.parse(`
 # From the example of the official docs:
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#example-of-a-codeowners-file
