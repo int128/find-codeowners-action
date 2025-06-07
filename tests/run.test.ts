@@ -1,4 +1,5 @@
 import { formatOwners } from '../src/run.js'
+import { describe, it, expect } from 'vitest'
 
 describe('formatOwners', () => {
   it('should format an empty owners', () => {
