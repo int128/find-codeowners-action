@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { formatOwners } from '../src/run.js'
 
 describe('formatOwners', () => {
