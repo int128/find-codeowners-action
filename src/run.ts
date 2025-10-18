@@ -1,7 +1,7 @@
-import { createMatcher } from './codeowners.js'
+import * as fs from 'node:fs/promises'
 import * as core from '@actions/core'
-import * as fs from 'fs/promises'
 import { glob } from 'glob'
+import { createMatcher } from './codeowners.js'
 
 type Inputs = {
   codeowners: string

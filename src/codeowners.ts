@@ -48,7 +48,7 @@ const compile = (rule: Rule): RuleMatcher => {
   return {
     match: (filename: string) => {
       if (!filename.startsWith('/')) {
-        filename = '/' + filename
+        filename = `/${filename}`
       }
       return m.match(filename)
     },
