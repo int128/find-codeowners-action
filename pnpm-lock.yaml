@@ -12,8 +12,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       glob:
-        specifier: 13.0.0
-        version: 13.0.0
+        specifier: 13.0.1
+        version: 13.0.1
       minimatch:
         specifier: 10.1.2
         version: 10.1.2
@@ -470,8 +470,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  glob@13.0.0:
-    resolution: {integrity: sha512-tvZgpqk6fz4BaNZ66ZsRaZnbHvP/jG3uKJvAZOwEVUL4RTA5nJeeLYfyN9/VA8NX/V3IBG+hkeuGpKjvELkVhA==}
+  glob@13.0.1:
+    resolution: {integrity: sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==}
     engines: {node: 20 || >=22}
 
   lru-cache@11.1.0:
@@ -948,7 +948,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  glob@13.0.0:
+  glob@13.0.1:
     dependencies:
       minimatch: 10.1.2
       minipass: 7.1.2

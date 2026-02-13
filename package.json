@@ -8,7 +8,7 @@
   "type": "module",
   "dependencies": {
     "@actions/core": "3.0.0",
-    "glob": "13.0.0",
+    "glob": "13.0.1",
     "minimatch": "10.1.2"
   },
   "devDependencies": {
