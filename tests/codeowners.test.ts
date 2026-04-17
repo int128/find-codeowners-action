@@ -10,6 +10,8 @@ describe('class Matcher', () => {
     { pattern: 'docs/*', owners: ['@docs-owner'] },
     { pattern: 'logs/', owners: ['@logs-owner'] },
     { pattern: '/build/logs/', owners: ['@build-owner'] },
+    { pattern: '/apps', owners: ['@apps-owner'] },
+    { pattern: 'config', owners: ['@config-owner'] },
   ])
 
   it.each([
@@ -22,6 +24,13 @@ describe('class Matcher', () => {
     { filename: 'logs/1.log', owners: ['@logs-owner'] },
     { filename: 'component/logs/1.log', owners: ['@logs-owner'] },
     { filename: 'build/logs/1.log', owners: ['@build-owner'] },
+    { filename: 'apps', owners: ['@apps-owner'] },
+    { filename: 'apps/index.json', owners: ['@apps-owner'] },
+    { filename: 'apps/deep/index.json', owners: ['@apps-owner'] },
+    { filename: 'component/apps/index.json', owners: [] },
+    { filename: 'config', owners: ['@config-owner'] },
+    { filename: 'config/test.json', owners: ['@config-owner'] },
+    { filename: 'component/config/test.json', owners: ['@config-owner'] },
   ])('returns $owners corresponding to $filename', ({ filename, owners }) => {
     const found = matcher.findOwners(filename)
     expect(found).toStrictEqual(owners)

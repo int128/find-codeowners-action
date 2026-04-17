@@ -35,22 +35,30 @@ const compile = (rule: Rule): RuleMatcher => {
   } else if (!pattern.startsWith('/')) {
     pattern = `/**/${pattern}`
   }
-  if (pattern.endsWith('/')) {
-    pattern = `${pattern}**`
-  }
-  const m = new Minimatch(pattern, {
+  const options = {
     dot: true,
     nobrace: true,
     nocomment: true,
     noext: true,
     nonegate: true,
-  })
+  }
+
+  const matchers: Minimatch[] = []
+  if (pattern.endsWith('/')) {
+    matchers.push(new Minimatch(`${pattern}**`, options))
+  } else if (pattern.endsWith('*')) {
+    matchers.push(new Minimatch(pattern, options))
+  } else {
+    matchers.push(new Minimatch(pattern, options))
+    matchers.push(new Minimatch(`${pattern}/**`, options))
+  }
+
   return {
     match: (filename: string) => {
       if (!filename.startsWith('/')) {
         filename = `/${filename}`
       }
-      return m.match(filename)
+      return matchers.some((m) => m.match(filename))
     },
     owners: rule.owners,
   }
