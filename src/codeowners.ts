@@ -44,12 +44,13 @@ const compile = (rule: Rule): RuleMatcher => {
   }
 
   const matchers: Minimatch[] = []
+  const baseMatcher = new Minimatch(pattern, options)
   if (pattern.endsWith('/')) {
     matchers.push(new Minimatch(`${pattern}**`, options))
-  } else if (pattern.endsWith('*')) {
-    matchers.push(new Minimatch(pattern, options))
+  } else if (baseMatcher.hasMagic()) {
+    matchers.push(baseMatcher)
   } else {
-    matchers.push(new Minimatch(pattern, options))
+    matchers.push(baseMatcher)
     matchers.push(new Minimatch(`${pattern}/**`, options))
   }
 
