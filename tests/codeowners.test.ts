@@ -11,6 +11,7 @@ describe('class Matcher', () => {
     { pattern: 'logs/', owners: ['@logs-owner'] },
     { pattern: '/build/logs/', owners: ['@build-owner'] },
     { pattern: '/apps', owners: ['@apps-owner'] },
+    { pattern: '/apps/*-tests', owners: ['@apps-tests-owner'] },
     { pattern: 'config', owners: ['@config-owner'] },
   ])
 
@@ -28,6 +29,7 @@ describe('class Matcher', () => {
     { filename: 'apps/index.json', owners: ['@apps-owner'] },
     { filename: 'apps/deep/index.json', owners: ['@apps-owner'] },
     { filename: 'component/apps/index.json', owners: [] },
+    { filename: 'apps/foo-tests/foo.ts', owners: ['@apps-tests-owner'] },
     { filename: 'config', owners: ['@config-owner'] },
     { filename: 'config/test.json', owners: ['@config-owner'] },
     { filename: 'component/config/test.json', owners: ['@config-owner'] },
