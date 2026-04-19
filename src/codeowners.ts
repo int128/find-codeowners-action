@@ -29,30 +29,43 @@ type RuleMatcher = {
 }
 
 const compile = (rule: Rule): RuleMatcher => {
-  let pattern = rule.pattern
+  const matchers = transformPatternForMinimatch(rule.pattern).map(
+    (pattern) =>
+      new Minimatch(pattern, {
+        dot: true,
+        nobrace: true,
+        nocomment: true,
+        noext: true,
+        nonegate: true,
+      }),
+  )
+  return {
+    match: (filename: string) => {
+      // Ensure the leading slash for matching.
+      if (!filename.startsWith('/')) {
+        filename = `/${filename}`
+      }
+      return matchers.some((matcher) => matcher.match(filename))
+    },
+    owners: rule.owners,
+  }
+}
+
+const transformPatternForMinimatch = (pattern: string): string[] => {
+  // Ensure the leading slash.
   if (pattern.startsWith('**')) {
     pattern = `/${pattern}`
   } else if (!pattern.startsWith('/')) {
     pattern = `/**/${pattern}`
   }
+
   if (pattern.endsWith('/')) {
-    pattern = `${pattern}**`
-  }
-  const m = new Minimatch(pattern, {
-    dot: true,
-    nobrace: true,
-    nocomment: true,
-    noext: true,
-    nonegate: true,
-  })
-  return {
-    match: (filename: string) => {
-      if (!filename.startsWith('/')) {
-        filename = `/${filename}`
-      }
-      return m.match(filename)
-    },
-    owners: rule.owners,
+    return [`${pattern}**`]
+  } else if (pattern.endsWith('*')) {
+    return [pattern]
+  } else {
+    // A pattern without a trailing slash should match both the file and the directory.
+    return [pattern, `${pattern}/**`]
   }
 }
 
