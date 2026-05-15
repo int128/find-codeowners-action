@@ -21,5 +21,5 @@ outputs:
     description: List of files which are not owned in CODEOWNERS, separated by new line
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
