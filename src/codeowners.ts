@@ -29,20 +29,20 @@ type RuleMatcher = {
 }
 
 const compile = (rule: Rule): RuleMatcher => {
-  const globPatterns = transformCodeownersToGlob(rule.pattern)
+  const globPattern = transformCodeownersToGlob(rule.pattern)
   return {
     match: (filename: string) => {
       // Ensure the leading slash for matching.
       if (!filename.startsWith('/')) {
         filename = `/${filename}`
       }
-      return globPatterns.some((globPattern) => matchesGlob(filename, globPattern))
+      return matchesGlob(filename, globPattern)
     },
     owners: rule.owners,
   }
 }
 
-const transformCodeownersToGlob = (pattern: string): string[] => {
+const transformCodeownersToGlob = (pattern: string): string => {
   // Ensure the leading slash.
   if (pattern.startsWith('**')) {
     pattern = `/${pattern}`
@@ -51,13 +51,15 @@ const transformCodeownersToGlob = (pattern: string): string[] => {
   }
 
   if (pattern.endsWith('/')) {
-    return [`${pattern}**`]
-  } else if (pattern.endsWith('*')) {
-    return [pattern]
-  } else {
+    pattern = `${pattern}**`
+  } else if (!pattern.endsWith('*')) {
     // A pattern without a trailing slash should match both the file and the directory.
-    return [pattern, `${pattern}/**`]
+    pattern = `${pattern}{,/**}`
   }
+
+  // path.matchesGlob does not match dotfiles with a wildcard.
+  // This replaces '*' with '{,.}*' to match dotfiles as well.
+  return pattern.replaceAll(/\*\*?/g, '{,.}$&')
 }
 
 export class Matcher {
