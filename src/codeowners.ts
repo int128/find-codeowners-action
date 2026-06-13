@@ -1,4 +1,4 @@
-import { Minimatch } from 'minimatch'
+import { matchesGlob } from 'node:path'
 
 export type Rule = {
   pattern: string
@@ -29,29 +29,20 @@ type RuleMatcher = {
 }
 
 const compile = (rule: Rule): RuleMatcher => {
-  const matchers = transformPatternForMinimatch(rule.pattern).map(
-    (pattern) =>
-      new Minimatch(pattern, {
-        dot: true,
-        nobrace: true,
-        nocomment: true,
-        noext: true,
-        nonegate: true,
-      }),
-  )
+  const globPatterns = transformCodeownersToGlob(rule.pattern)
   return {
     match: (filename: string) => {
       // Ensure the leading slash for matching.
       if (!filename.startsWith('/')) {
         filename = `/${filename}`
       }
-      return matchers.some((matcher) => matcher.match(filename))
+      return globPatterns.some((globPattern) => matchesGlob(filename, globPattern))
     },
     owners: rule.owners,
   }
 }
 
-const transformPatternForMinimatch = (pattern: string): string[] => {
+const transformCodeownersToGlob = (pattern: string): string[] => {
   // Ensure the leading slash.
   if (pattern.startsWith('**')) {
     pattern = `/${pattern}`
