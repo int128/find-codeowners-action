@@ -18,10 +18,14 @@ describe('class Matcher', () => {
   it.each([
     { filename: 'README.md', owners: [] },
     { filename: 'index.js', owners: ['@js-owner'] },
+    { filename: '.config.js', owners: ['@js-owner'] },
+    { filename: '.config/env.js', owners: ['@js-owner'] },
     { filename: 'src/index.js', owners: ['@js-owner'] },
     { filename: 'docs/index.md', owners: ['@docs-owner'] },
     { filename: 'docs/deep/index.md', owners: ['@root-docs-owner'] },
     { filename: 'component/docs/index.md', owners: ['@docs-owner'] },
+    { filename: 'component/docs/.gitignore', owners: ['@docs-owner'] },
+    { filename: '.github/docs/index.md', owners: ['@docs-owner'] },
     { filename: 'logs/1.log', owners: ['@logs-owner'] },
     { filename: 'component/logs/1.log', owners: ['@logs-owner'] },
     { filename: 'build/logs/1.log', owners: ['@build-owner'] },
@@ -30,12 +34,13 @@ describe('class Matcher', () => {
     { filename: 'apps/deep/index.json', owners: ['@apps-owner'] },
     { filename: 'component/apps/index.json', owners: [] },
     { filename: 'apps/foo-tests/foo.ts', owners: ['@apps-tests-owner'] },
+    { filename: 'apps/.foo-tests', owners: ['@apps-tests-owner'] },
+    { filename: 'apps/.foo-tests/bar', owners: ['@apps-tests-owner'] },
     { filename: 'config', owners: ['@config-owner'] },
     { filename: 'config/test.json', owners: ['@config-owner'] },
     { filename: 'component/config/test.json', owners: ['@config-owner'] },
   ])('returns $owners corresponding to $filename', ({ filename, owners }) => {
-    const found = matcher.findOwners(filename)
-    expect(found).toStrictEqual(owners)
+    expect(matcher.findOwners(filename)).toStrictEqual(owners)
   })
 })
 
