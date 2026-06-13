@@ -59,7 +59,7 @@ const transformCodeownersToGlob = (pattern: string): string => {
 
   // path.matchesGlob does not match dotfiles with a wildcard.
   // This replaces '*' with '{,.}*' to match dotfiles as well.
-  return pattern.replaceAll(/\*\*?/g, '{,.}$&')
+  return pattern.replaceAll(/(?<!\\)\*\*?/g, '{,.}$&')
 }
 
 export class Matcher {
